@@ -1,0 +1,5 @@
+node_modules/
+.testmuai/evidence/
+.testmuai/sessions/
+*.log
+.DS_Store

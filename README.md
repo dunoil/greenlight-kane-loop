@@ -20,6 +20,10 @@ printable invoice view. Zero npm dependencies; data persists in
 `localStorage`. Its numbers are its contract (see `spec.md`): subtotal →
 discount → **tax on the discounted amount** → total, rounded to the cent.
 
+**Live demo:** https://dunoil.github.io/greenlight-kane-loop/ — the app plus its
+[Loop Log](https://dunoil.github.io/greenlight-kane-loop/loop-log.html), showing every
+Kane iteration: the passes, and the two chaos regressions Kane caught.
+
 ### Run it (one command)
 
 ```bash

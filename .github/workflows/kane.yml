@@ -39,6 +39,13 @@ jobs:
           KANE_CLI_USER_AGENT: github-actions
         run: node loop/loop.js
 
+      - name: Run the chaos cycle (Kane must catch both regressions)
+        env:
+          LT_USERNAME: ${{ secrets.LT_USERNAME }}
+          LT_ACCESS_KEY: ${{ secrets.LT_ACCESS_KEY }}
+          KANE_CLI_USER_AGENT: github-actions-chaos
+        run: node loop/chaos-cycle.js
+
       - name: Upload loop log
         if: always()
         uses: actions/upload-artifact@v4
@@ -47,3 +54,5 @@ jobs:
           path: |
             loop/loop-log.json
             loop/last-failure.md
+            tests/output-*/
+            tests/chaos/output-*/

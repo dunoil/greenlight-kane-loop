@@ -1,4 +1,3 @@
----
 name: Kane CLI verification
 
 # No merge without a greenlight: the full Kane suite runs on every PR.
@@ -48,4 +47,3 @@ jobs:
           path: |
             loop/loop-log.json
             loop/last-failure.md
----

@@ -1,1 +1,71 @@
-{"iterations":[],"project":"greenlight"}
+{
+  "iterations": [
+    {
+      "iteration": 1,
+      "timestamp": "2026-11-19T02:51:34.390Z",
+      "suite": "create-invoice-totals_test.md",
+      "mode": "dry-run",
+      "verdict": "simulated",
+      "failing_step_remarks": [],
+      "summary": "Dry run — Kane CLI was not invoked. Simulated pass for create-invoice-totals_test.md; no verification happened.",
+      "test_url": null,
+      "fix_note": ""
+    },
+    {
+      "iteration": 2,
+      "timestamp": "2026-11-19T02:51:34.390Z",
+      "suite": "discount-tax-math_test.md",
+      "mode": "dry-run",
+      "verdict": "simulated",
+      "failing_step_remarks": [],
+      "summary": "Dry run — Kane CLI was not invoked. Simulated pass for discount-tax-math_test.md; no verification happened.",
+      "test_url": null,
+      "fix_note": ""
+    },
+    {
+      "iteration": 3,
+      "timestamp": "2026-11-19T02:51:34.390Z",
+      "suite": "mark-paid-flow_test.md",
+      "mode": "dry-run",
+      "verdict": "simulated",
+      "failing_step_remarks": [],
+      "summary": "Dry run — Kane CLI was not invoked. Simulated pass for mark-paid-flow_test.md; no verification happened.",
+      "test_url": null,
+      "fix_note": ""
+    },
+    {
+      "iteration": 4,
+      "timestamp": "2026-11-19T02:51:38.423Z",
+      "suite": "create-invoice-totals_test.md",
+      "mode": "kane",
+      "verdict": "did-not-start",
+      "failing_step_remarks": [],
+      "summary": "Did not start (exit 2) — nothing ran. Kane CLI is not signed in: run `kane-cli login` (or set LT_USERNAME / LT_ACCESS_KEY). No credits were used.",
+      "test_url": null,
+      "fix_note": ""
+    },
+    {
+      "iteration": 5,
+      "timestamp": "2026-11-19T02:51:40.265Z",
+      "suite": "discount-tax-math_test.md",
+      "mode": "kane",
+      "verdict": "did-not-start",
+      "failing_step_remarks": [],
+      "summary": "Did not start (exit 2) — nothing ran. Kane CLI is not signed in: run `kane-cli login` (or set LT_USERNAME / LT_ACCESS_KEY). No credits were used.",
+      "test_url": null,
+      "fix_note": ""
+    },
+    {
+      "iteration": 6,
+      "timestamp": "2026-11-19T02:51:42.292Z",
+      "suite": "mark-paid-flow_test.md",
+      "mode": "kane",
+      "verdict": "did-not-start",
+      "failing_step_remarks": [],
+      "summary": "Did not start (exit 2) — nothing ran. Kane CLI is not signed in: run `kane-cli login` (or set LT_USERNAME / LT_ACCESS_KEY). No credits were used.",
+      "test_url": null,
+      "fix_note": ""
+    }
+  ],
+  "project": "greenlight"
+}

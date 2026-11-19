@@ -98,6 +98,61 @@
       "summary": "The requested update was to mark invoice INV-1001 as paid.\nInvoice INV-1001 was updated successfully and now shows a Paid status in the invoice list.",
       "test_url": null,
       "fix_note": ""
+    },
+    {
+      "iteration": 10,
+      "timestamp": "2026-11-19T03:19:41.035Z",
+      "suite": "create-invoice-totals_test.md",
+      "mode": "kane",
+      "verdict": "passed",
+      "failing_step_remarks": [],
+      "summary": "Saved the invoice as requested.\nReturned to the invoice list, where the new Kane Check Co invoice is shown with a total of $100.00.",
+      "test_url": null,
+      "fix_note": ""
+    },
+    {
+      "iteration": 11,
+      "timestamp": "2026-11-19T03:21:31.174Z",
+      "suite": "discount-tax-math_test.md",
+      "mode": "kane",
+      "verdict": "passed",
+      "failing_step_remarks": [],
+      "summary": "You asked to save the invoice.\nThe Save Invoice button was selected.\nThe invoice was saved successfully and appears in the invoice list for Math Proof Ltd with a total of $198.00.",
+      "test_url": null,
+      "fix_note": ""
+    },
+    {
+      "iteration": 12,
+      "timestamp": "2026-11-19T03:22:34.209Z",
+      "suite": "mark-paid-flow_test.md",
+      "mode": "kane",
+      "verdict": "passed",
+      "failing_step_remarks": [],
+      "summary": "The requested update was to mark invoice INV-1001 as paid.\nINV-1001 was updated in the invoice list, and its status now shows Paid.",
+      "test_url": null,
+      "fix_note": ""
+    },
+    {
+      "iteration": 13,
+      "timestamp": "2026-11-19T03:24:13.075Z",
+      "suite": "tests/chaos/chaos-mark-paid_test.md",
+      "mode": "kane-chaos",
+      "verdict": "failed",
+      "failing_step_remarks": [],
+      "summary": "The enabled chaos regression causes the Mark as Paid button to accept a click without changing the invoice status.\nFix the Mark as Paid action so it updates INV-1001 from Sent to Paid and refreshes the invoice list. Turn off the injected chaos regression after validating the fix.\nevidence: objective_contradiction: invoice INV-1001 now shows status Paid in the invoice list\nevidence: error_ui_text: “Mark as Paid” does nothing\nevidence: error_ui_text: The button accepts the click and silently ignores it.",
+      "test_url": null,
+      "fix_note": "Expected failure: the chaos regression that makes \"Mark as Paid\" silently do nothing was ON, so INV-1001 stayed at status Sent and Kane caught it. Fix: turn Chaos mode off — no app code change needed. The main mark-paid-flow suite passing proves the app is correct with chaos off."
+    },
+    {
+      "iteration": 14,
+      "timestamp": "2026-11-19T03:26:00.373Z",
+      "suite": "tests/chaos/chaos-tax-order_test.md",
+      "mode": "kane-chaos",
+      "verdict": "failed",
+      "failing_step_remarks": [],
+      "summary": "Tax was calculated from the full $200.00 subtotal instead of the discounted $180.00 amount. The page itself identifies this as a tax-before-discount regression.\nCalculate tax after applying the discount, then recalculate the final total. For this invoice, tax should be 10% of $180.00, or $18.00, making the total $198.00.\nevidence: error_ui_text: Chaos mode is ON — injected regression(s): Tax before discount. Run the Kane suite and watch it catch them.\nevidence: objective_contradiction: Checkpoint assertion failed: \"the totals preview shows Tax $18.00\"",
+      "test_url": null,
+      "fix_note": "Expected failure: the \"Tax before discount\" chaos regression was ON, so the worked example totalled $200.00 instead of $198.00 and Kane caught it. Fix: turn Chaos mode off — no app code change needed. The main discount-tax-math suite passing proves the app is correct with chaos off."
     }
   ],
   "project": "greenlight"

@@ -1,0 +1,51 @@
+---
+name: Kane CLI verification
+
+# No merge without a greenlight: the full Kane suite runs on every PR.
+# Requires repository secrets LT_USERNAME and LT_ACCESS_KEY
+# (TestMu AI dashboard -> Settings -> Keys).
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  kane:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Kane CLI
+        run: npm install -g @testmuai/kane-cli
+
+      - name: Check the money math
+        run: npm run check
+
+      - name: Start InvoiceForge
+        run: |
+          npm start &
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:4173 >/dev/null && break
+            sleep 1
+          done
+
+      - name: Run the Kane loop
+        env:
+          LT_USERNAME: ${{ secrets.LT_USERNAME }}
+          LT_ACCESS_KEY: ${{ secrets.LT_ACCESS_KEY }}
+          KANE_CLI_USER_AGENT: github-actions
+        run: node loop/loop.js
+
+      - name: Upload loop log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: loop-log
+          path: |
+            loop/loop-log.json
+            loop/last-failure.md
+---

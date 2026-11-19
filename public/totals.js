@@ -20,7 +20,8 @@
     return Math.round((Number(n) + Number.EPSILON) * 100) / 100;
   }
 
-  function computeTotals(items, discountPct, taxPct) {
+  function computeTotals(items, discountPct, taxPct, chaos) {
+    chaos = chaos || {};
     var list = Array.isArray(items) ? items : [];
     var subtotal = round2(
       list.reduce(function (sum, it) {
@@ -29,8 +30,12 @@
     );
     var discount = round2(subtotal * ((Number(discountPct) || 0) / 100));
     var discountedSubtotal = round2(subtotal - discount);
-    var tax = round2(discountedSubtotal * ((Number(taxPct) || 0) / 100));
+    // CHAOS (a): tax on the full subtotal, before the discount (breaks AC-5).
+    var taxBase = chaos.taxOrder ? subtotal : discountedSubtotal;
+    var tax = round2(taxBase * ((Number(taxPct) || 0) / 100));
     var total = round2(discountedSubtotal + tax);
+    // CHAOS (b): one-cent rounding drift on the total (breaks AC-6).
+    if (chaos.roundingDrift) total = round2(total + 0.01);
     return {
       subtotal: subtotal,
       discount: discount,

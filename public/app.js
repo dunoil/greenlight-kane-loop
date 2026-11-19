@@ -8,8 +8,24 @@
 
   var STORE_KEY = 'invoiceforge.invoices.v1';
   var SEQ_KEY = 'invoiceforge.seq.v1';
+  var CHAOS_KEY = 'invoiceforge.chaos.v1';
 
   var state = { invoices: [], editingId: null };
+
+  // ---------- chaos mode (AC-12, demo only) ----------
+  function loadChaos() {
+    try {
+      return JSON.parse(localStorage.getItem(CHAOS_KEY) || '{}') || {};
+    } catch (e) {
+      return {};
+    }
+  }
+  function saveChaos(chaos) {
+    localStorage.setItem(CHAOS_KEY, JSON.stringify(chaos));
+  }
+  function chaosOn(chaos) {
+    return !!(chaos.taxOrder || chaos.roundingDrift || chaos.paidBroken);
+  }
 
   function money(n) {
     return '$' + Number(n || 0).toFixed(2);
@@ -18,7 +34,7 @@
     return 'inv-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8);
   }
   function totalsFor(inv) {
-    return window.InvoiceMath.computeTotals(inv.items, inv.discountPct, inv.taxPct);
+    return window.InvoiceMath.computeTotals(inv.items, inv.discountPct, inv.taxPct, loadChaos());
   }
 
   // ---------- persistence + seed (AC-11) ----------
@@ -130,6 +146,8 @@
   function markAsPaid(id) {
     var inv = state.invoices.find(function (i) { return i.id === id; });
     if (!inv) return;
+    // CHAOS (c): the button silently does nothing (breaks AC-8).
+    if (loadChaos().paidBroken) return;
     inv.status = 'paid';
     save();
     renderList();
@@ -230,7 +248,8 @@
     var t = window.InvoiceMath.computeTotals(
       items,
       Number(document.getElementById('discountPct').value) || 0,
-      Number(document.getElementById('taxPct').value) || 0
+      Number(document.getElementById('taxPct').value) || 0,
+      loadChaos()
     );
     document.getElementById('prevSubtotal').textContent = money(t.subtotal);
     document.getElementById('prevDiscount').textContent = '−' + money(t.discount);
@@ -266,6 +285,45 @@
     showList();
   }
 
+  // ---------- chaos panel ----------
+  var CHAOS_DEFS = [
+    { key: 'taxOrder', label: 'Tax before discount', desc: 'Tax is calculated on the full subtotal instead of the discounted amount. Breaks AC-5 — the Kane discount/tax test catches it ($200.00 total instead of $198.00).' },
+    { key: 'roundingDrift', label: 'One-cent rounding drift', desc: 'Every total quietly gains $0.01. Breaks AC-6 — Kane asserts exact totals to the cent.' },
+    { key: 'paidBroken', label: '“Mark as Paid” does nothing', desc: 'The button accepts the click and silently ignores it. Breaks AC-8 — the Kane mark-paid flow catches it.' },
+  ];
+
+  function renderChaos() {
+    var chaos = loadChaos();
+    var banner = document.getElementById('chaosBanner');
+    if (chaosOn(chaos)) {
+      var active = CHAOS_DEFS.filter(function (d) { return chaos[d.key]; })
+        .map(function (d) { return d.label; }).join(' · ');
+      banner.textContent = '⚠ Chaos mode is ON — injected regression(s): ' + active + '. Run the Kane suite and watch it catch them.';
+      banner.classList.add('on');
+    } else {
+      banner.textContent = '';
+      banner.classList.remove('on');
+    }
+    var rows = CHAOS_DEFS.map(function (d) {
+      return '<div class="switch-row"><div><strong>' + d.label + '</strong><p>' + d.desc + '</p></div>' +
+        '<label class="switch"><input type="checkbox" data-chaos="' + d.key + '"' + (chaos[d.key] ? ' checked' : '') +
+        '><span class="slider"></span></label></div>';
+    }).join('');
+    document.getElementById('chaosMount').innerHTML =
+      '<div class="card chaos"><div class="toolbar"><h2>Chaos mode — demo only</h2></div>' +
+      '<p style="color:var(--muted); font-size:14.5px; margin-top:0;">Inject a realistic regression, then run <code>npm run loop</code>. ' +
+      'Kane CLI drives a real browser, catches the wrong number or the dead button, and the loop hands the failure to the coding agent. ' +
+      'Turn chaos off and the same suite goes green.</p>' + rows + '</div>';
+    document.querySelectorAll('[data-chaos]').forEach(function (input) {
+      input.addEventListener('change', function () {
+        var c = loadChaos();
+        c[input.getAttribute('data-chaos')] = input.checked;
+        saveChaos(c);
+        renderChaos();
+      });
+    });
+  }
+
   // ---------- wiring ----------
   document.getElementById('newInvoiceBtn').addEventListener('click', function () { showEditor(null); });
   document.getElementById('backBtn').addEventListener('click', showList);
@@ -291,4 +349,5 @@
 
   load();
   renderList();
+  renderChaos();
 })();

@@ -65,6 +65,39 @@
       "summary": "Did not start (exit 2) — nothing ran. Kane CLI is not signed in: run `kane-cli login` (or set LT_USERNAME / LT_ACCESS_KEY). No credits were used.",
       "test_url": null,
       "fix_note": ""
+    },
+    {
+      "iteration": 7,
+      "timestamp": "2026-11-19T03:10:19.378Z",
+      "suite": "create-invoice-totals_test.md",
+      "mode": "kane",
+      "verdict": "passed",
+      "failing_step_remarks": [],
+      "summary": "The requested action was to save the invoice.\nThe invoice was saved successfully and the invoice list was shown again.\nThe list includes an invoice for Kane Check Co with a total of $100.00.",
+      "test_url": null,
+      "fix_note": ""
+    },
+    {
+      "iteration": 8,
+      "timestamp": "2026-11-19T03:12:24.166Z",
+      "suite": "discount-tax-math_test.md",
+      "mode": "kane",
+      "verdict": "passed",
+      "failing_step_remarks": [],
+      "summary": "You asked to save the invoice.\nThe invoice was saved successfully.\nThe invoice list now shows Math Proof Ltd with a total of $198.00.",
+      "test_url": null,
+      "fix_note": ""
+    },
+    {
+      "iteration": 9,
+      "timestamp": "2026-11-19T03:13:29.200Z",
+      "suite": "mark-paid-flow_test.md",
+      "mode": "kane",
+      "verdict": "passed",
+      "failing_step_remarks": [],
+      "summary": "The requested update was to mark invoice INV-1001 as paid.\nInvoice INV-1001 was updated successfully and now shows a Paid status in the invoice list.",
+      "test_url": null,
+      "fix_note": ""
     }
   ],
   "project": "greenlight"

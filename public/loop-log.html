@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loop Log — Greenlight</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="logo" aria-hidden="true">✓</div>
+    <div>
+      <h1>Loop Log</h1>
+      <p>Every Kane CLI verification run, on the record</p>
+    </div>
+  </div>
+  <nav>
+    <a href="/">Invoices</a>
+    <a href="/loop-log.html">Loop Log</a>
+  </nav>
+</header>
+
+<main class="shell">
+  <div class="card">
+    <div class="toolbar">
+      <h2>Agent ↔ Kane iterations</h2>
+      <span id="loopSummary" style="color:var(--muted); font-size:14px;"></span>
+    </div>
+    <p style="color:var(--muted); font-size:14.5px; margin-top:0;">
+      The loop engine (<code>node loop/loop.js</code>) runs the Kane suite, parses the
+      NDJSON verdict, and appends one entry per test here. A failure also writes
+      <code>loop/last-failure.md</code> — the fix prompt the coding agent works from.
+      Nothing in this log is hand-written.
+    </p>
+    <div id="iterations"></div>
+  </div>
+</main>
+
+<footer class="note">Greenlight · <a href="/">Back to InvoiceForge</a></footer>
+
+<script src="/loop-log.js"></script>
+</body>
+</html>
